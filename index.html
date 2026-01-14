@@ -4,28 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tobiasz Koguciuk – Doradca Ubezpieczeniowy</title>
+
     <style>
         body {
             margin: 0;
             font-family: Arial, Helvetica, sans-serif;
             background: #f5f5f5;
             color: #333;
+            overflow-x: hidden;
         }
 
+        /* HEADER */
         header {
             background: linear-gradient(135deg, #003366, #0066cc);
             color: white;
             padding: 70px 20px;
             text-align: center;
+            animation: fadeDown 1.2s ease-out;
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         header h1 {
             font-size: 42px;
             margin-bottom: 10px;
-        }
-
-        .lang-switch {
-            margin-top: 20px;
         }
 
         .lang-switch button {
@@ -37,8 +42,16 @@
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
+            transition: 0.3s;
         }
 
+        .lang-switch button:hover {
+            background: #003366;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* SEKCJE */
         .container {
             max-width: 1000px;
             margin: 40px auto;
@@ -51,6 +64,14 @@
             margin-bottom: 25px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            opacity: 0;
+            transform: translateY(40px);
+            transition: 0.8s ease-out;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         h2 {
@@ -58,12 +79,19 @@
             color: #003366;
         }
 
+        /* FORMULARZ */
         form input, form textarea {
             width: 100%;
             padding: 12px;
             margin: 10px 0;
             border-radius: 6px;
             border: 1px solid #ccc;
+            transition: 0.3s;
+        }
+
+        form input:focus, form textarea:focus {
+            border-color: #0066cc;
+            box-shadow: 0 0 8px rgba(0,102,204,0.3);
         }
 
         form button {
@@ -74,6 +102,22 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
+            transition: 0.3s;
+        }
+
+        form button:hover {
+            background: #004c99;
+            transform: scale(1.05);
+        }
+
+        /* ANIMACJA ZMIANY JĘZYKA */
+        [data-lang] {
+            animation: fadeLang 0.5s ease;
+        }
+
+        @keyframes fadeLang {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         footer {
@@ -81,6 +125,12 @@
             padding: 20px;
             color: #777;
             font-size: 14px;
+            animation: fadeUp 1.2s ease-out;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 
@@ -90,8 +140,19 @@
                 el.style.display = el.getAttribute("data-lang") === lang ? "block" : "none";
             });
         }
+
+        // Animacje sekcji przy przewijaniu
+        document.addEventListener("scroll", () => {
+            document.querySelectorAll(".section").forEach(sec => {
+                const rect = sec.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    sec.classList.add("visible");
+                }
+            });
+        });
     </script>
 </head>
+
 <body onload="switchLang('pl')">
 
 <header>
@@ -126,67 +187,5 @@
                 <li>Ubezpieczenia samochodowe (KFZ)</li>
                 <li>Ubezpieczenia mieszkania i domu</li>
                 <li>Ubezpieczenia OC prywatne i zawodowe</li>
-                <li>Ubezpieczenia firmowe</li>
-                <li>Doradztwo w języku polskim i niemieckim</li>
-            </ul>
-        </div>
+               
 
-        <div class="section">
-            <h2>Kontakt</h2>
-            <form action="mailto:koguciuk@pro-fina.de" method="post" enctype="text/plain">
-                <input type="text" name="Imię i nazwisko" placeholder="Imię i nazwisko" required>
-                <input type="email" name="Email" placeholder="Email" required>
-                <input type="tel" name="Telefon" placeholder="Numer telefonu" required>
-                <textarea name="Wiadomość" rows="5" placeholder="Twoja wiadomość..." required></textarea>
-                <button type="submit">Wyślij</button>
-            </form>
-        </div>
-
-    </div>
-
-    <!-- NIEMIECKA WERSJA -->
-    <div data-lang="de">
-
-        <div class="section">
-            <h2>Über mich</h2>
-            <p>
-                Ich unterstütze Kunden in Deutschland und Polen bei der Auswahl der besten Versicherungen:
-                Leben, Gesundheit, Auto, Haus und finanzielle Absicherung. Klare Bedingungen, Transparenz
-                und individuelle Beratung stehen bei mir im Mittelpunkt.
-            </p>
-        </div>
-
-        <div class="section">
-            <h2>Versicherungsangebot</h2>
-            <ul>
-                <li>Lebensversicherung</li>
-                <li>Krankenversicherung</li>
-                <li>KFZ-Versicherung</li>
-                <li>Haus- und Wohnungsversicherung</li>
-                <li>Private und berufliche Haftpflicht</li>
-                <li>Firmenversicherungen</li>
-                <li>Beratung auf Deutsch und Polnisch</li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>Kontakt</h2>
-            <form action="mailto:koguciuk@pro-fina.de" method="post" enctype="text/plain">
-                <input type="text" name="Name" placeholder="Name" required>
-                <input type="email" name="Email" placeholder="E-Mail" required>
-                <input type="tel" name="Telefon" placeholder="Telefonnummer" required>
-                <textarea name="Nachricht" rows="5" placeholder="Ihre Nachricht..." required></textarea>
-                <button type="submit">Senden</button>
-            </form>
-        </div>
-
-    </div>
-
-</div>
-
-<footer>
-    © 2026 Tobiasz Koguciuk – Doradca Ubezpieczeniowy / Versicherungsberater
-</footer>
-
-</body>
-</html>
